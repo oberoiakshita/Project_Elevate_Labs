@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Attack Logs - Honeypot System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1><i class="fas fa-list me-2"></i>Attack Logs</h1>
+        <p class="text-muted">Detailed log of all SSH attack attempts</p>
+    </div>
+</div>
+
+{% if error %}
+<div class="alert alert-warning" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    <strong>Error:</strong> {{ error }}
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h5 class="card-title mb-0">Attack Log Entries</h5>
+            </div>
+            <div class="col-auto">
+                {% if pagination and pagination.total %}
+                <small class="text-muted">
+                    Showing {{ pagination.per_page * (pagination.page - 1) + 1 }} - 
+                    {{ pagination.per_page * pagination.page if pagination.per_page * pagination.page < pagination.total else pagination.total }} 
+                    of {{ pagination.total }} entries
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="card-body p-0">
+        {% if logs %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 log-entry">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Source IP</th>
+                        <th>Location</th>
+                        <th>Credentials</th>
+                        <th>Session</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td class="timestamp">
+                            {{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') if log.timestamp else 'Unknown' }}
+                        </td>
+                        <td>
+                            <span class="ip-address">{{ log.source_ip }}</span>:{{ log.source_port }}
+                        </td>
+                        <td>
+                            {% if log.city and log.country %}
+                                {{ log.city }}, {{ log.country }}
+                            {% elif log.country %}
+                                {{ log.country }}
+                            {% else %}
+                                <span class="text-muted">Unknown</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="credential">{{ log.username or 'unknown' }}</span> / 
+                            <span class="credential">{{ log.password or 'unknown' }}</span>
+                        </td>
+                        <td>
+                            <small class="text-muted">{{ log.session_id[:8] if log.session_id else 'N/A' }}...</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">{{ log.attack_type }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No attack logs found</h5>
+            <p class="text-muted">Attack attempts will appear here once the honeypot starts receiving connections.</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    {% if pagination and pagination.pages > 1 %}
+    <div class="card-footer">
+        <nav aria-label="Attack log pagination">
+            <ul class="pagination pagination-sm mb-0 justify-content-center">
+                {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('logs', page=pagination.prev_num) }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% for page_num in pagination.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num != pagination.page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('logs', page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('logs', page=pagination.next_num) }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

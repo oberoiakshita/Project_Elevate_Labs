@@ -1,0 +1,126 @@
+/* Custom styles for the honeypot dashboard */
+
+.stats-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+}
+
+.attack-timeline {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.attack-item {
+    border-left: 3px solid var(--bs-primary);
+    padding-left: 15px;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease;
+}
+
+.attack-item:hover {
+    border-color: var(--bs-warning);
+}
+
+.map-container {
+    height: 500px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    margin-bottom: 30px;
+}
+
+.log-entry {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.ip-address {
+    color: var(--bs-info);
+    font-weight: bold;
+}
+
+.credential {
+    color: var(--bs-warning);
+    font-weight: bold;
+}
+
+.timestamp {
+    color: var(--bs-secondary);
+}
+
+.country-flag {
+    width: 20px;
+    height: 15px;
+    margin-right: 5px;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.status-active {
+    background-color: var(--bs-success);
+    animation: pulse 2s infinite;
+}
+
+.status-inactive {
+    background-color: var(--bs-secondary);
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.loading-spinner {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.loading-spinner.show {
+    display: flex;
+}
+
+/* Dark theme adjustments */
+[data-bs-theme="dark"] .table {
+    --bs-table-bg: var(--bs-dark);
+}
+
+[data-bs-theme="dark"] .card {
+    --bs-card-bg: var(--bs-dark);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .chart-container {
+        height: 300px;
+    }
+    
+    .map-container {
+        height: 300px;
+    }
+    
+    .stats-card {
+        margin-bottom: 15px;
+    }
+}

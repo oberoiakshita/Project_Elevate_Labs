@@ -1,0 +1,34 @@
+SQLite format 3000@0000.zq
+tablehoneypot_statshoneypot_statsCREATE TABLE honeypot_stats (
+	id INTEGER NOT NULL, 
+	date DATE NOT NULL, 
+	total_attacks INTEGER, 
+	unique_ips INTEGER, 
+	successful_logins INTEGER, 
+	failed_logins INTEGER, 
+	top_username VARCHAR(255), 
+	top_password VARCHAR(255), 
+	PRIMARY KEY (id), 
+	UNIQUE (date)
+);
+indexsqlite_autoindex_honeypot_stats_1honeypot_stats0006000{
+3tableattack_logsattack_logs{
+CREATE TABLE attack_logs (
+	id INTEGER NOT NULL, 
+	timestamp DATETIME NOT NULL, 
+	source_ip VARCHAR(45) NOT NULL, 
+	source_port INTEGER NOT NULL, 
+	username VARCHAR(255), 
+	password VARCHAR(255), 
+	command TEXT, 
+	session_id VARCHAR(64), 
+	attack_type VARCHAR(50) NOT NULL, 
+	country VARCHAR(100), 
+	city VARCHAR(100), 
+	latitude FLOAT, 
+	longitude FLOAT, 
+	user_agent VARCHAR(500), 
+	PRIMARY KEY (id)
+);
+}
+}
